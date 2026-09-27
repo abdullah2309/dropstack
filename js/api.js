@@ -1,8 +1,9 @@
 /* DropStack API — shared data fetching from remote endpoints */
 (function () {
     'use strict';
-
-    const API_BASE = 'https://dropstack.atwebpages.com/api';
+    
+    const API_BASE = 'https://dropstack.site.je/api';
+    // const API_BASE = 'http://dropstack.atwebpages.com/api';
 
     const endpoints = {
         drops: API_BASE + '/drops.php',
