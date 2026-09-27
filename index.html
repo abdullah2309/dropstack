@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DropStack — Open Source DropStack to Popular Software</title>
+    <meta name="description" content="Discover the best open source DropStack to popular SaaS products. Ditch subscriptions and take back control of your data.">
+    <meta name="theme-color" id="metaTheme" content="#0a1310">
+    <link rel="icon" href="assets/logo/iconlogo.png">
+
+    <!-- Resolve saved theme BEFORE first paint (no flash) -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('oa-theme') || 'dark';
+                var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (t === 'dark' || (t === 'system' && sysDark)) document.documentElement.classList.add('dark');
+            } catch (e) { document.documentElement.classList.add('dark'); }
+        })();
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Geist typeface (Vercel's design system font) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        mono: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+                    },
+                    colors: {
+                        background: 'var(--background)',
+                        card: 'var(--card)',
+                        popover: 'var(--popover)',
+                        border: 'var(--border)',
+                        primary: 'var(--foreground)',
+                        secondary: 'var(--secondary)',
+                        accent: 'var(--accent)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-background text-primary font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- ================= Header ================= -->
+    <header class="site-header sticky top-0 z-40 w-full border-b border-border">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+            <div class="flex h-16 items-center justify-between gap-3">
+                <!-- Left: logo + nav -->
+                <div class="flex items-center gap-7">
+                    <a href="index.html" class="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight">
+                        <img src="assets/logo/logo-main-light.png" alt="DropStack logo" class="h-6 w-auto dark:hidden">
+                        <img src="assets/logo/logo-main-dark.png" alt="DropStack logo" class="hidden h-6 w-auto dark:block">
+                    </a>
+                    <nav class="hidden md:flex items-center gap-0.5 text-sm font-medium">
+                        <a href="projects.html" class="nav-link">Drops</a>
+                        <a href="news.html" class="nav-link">News</a>
+                        <a href="pricing.html" class="nav-link">Pricing</a>
+                        <a href="about.html" class="nav-link">About</a>
+                    </nav>
+                </div>
+
+                <!-- Right: actions -->
+                <div class="flex items-center gap-2">
+                    <button id="headerSearch" class="icon-btn" aria-label="Search DropStack">
+                        <span><i class="fa-solid fa-magnifying-glass text-[15px]"></i></span>
+                    </button>
+                    <!-- <a href="https://github.com/abdullah2309/" target="_blank" rel="noopener"
+                       class="btn btn-outline hidden sm:inline-flex" title="Star DropStack on GitHub">
+                        <span><i class="fa-brands fa-github text-[15px]"></i></span>
+                        <span class="font-mono text-xs font-medium">4.2k</span>
+                    </a> -->
+
+                    <!-- Theme dropdown (moon icon) -->
+                    <div class="theme-wrap relative" id="themeWrap">
+                        <button id="themeBtn" class="icon-btn" aria-label="Change theme" aria-haspopup="listbox" aria-expanded="false">
+                            <span id="tiSun" class="hidden"><i class="fa-solid fa-sun text-[15px]"></i></span>
+                            <span id="tiMoon"><i class="fa-solid fa-moon text-[15px]"></i></span>
+                            <span id="tiMonitor" class="hidden"><i class="fa-solid fa-desktop text-[15px]"></i></span>
+                        </button>
+                        <div class="theme-menu" id="themeMenu" role="listbox" aria-label="Appearance">
+                            <p class="px-2.5 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-wider text-secondary">Appearance</p>
+                            <button class="theme-option" role="option" data-set-theme="light" aria-selected="false">
+                                <span><i class="fa-solid fa-sun text-[14px]"></i></span> Light
+                                <span class="check"><i class="fa-solid fa-check text-[12px]"></i></span>
+                            </button>
+                            <button class="theme-option" role="option" data-set-theme="dark" aria-selected="false">
+                                <span><i class="fa-solid fa-moon text-[14px]"></i></span> Dark
+                                <span class="check"><i class="fa-solid fa-check text-[12px]"></i></span>
+                            </button>
+                            <button class="theme-option" role="option" data-set-theme="system" aria-selected="false">
+                                <span><i class="fa-solid fa-desktop text-[14px]"></i></span> System
+                                <span class="check"><i class="fa-solid fa-check text-[12px]"></i></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="menuBtn" class="icon-btn md:hidden" aria-label="Toggle menu">
+                        <span id="miMenu"><i class="fa-solid fa-bars text-[15px]"></i></span>
+                        <span id="miClose" class="hidden"><i class="fa-solid fa-xmark text-[15px]"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="mobile-menu hidden border-t border-border md:hidden">
+            <nav class="mx-auto flex max-w-6xl flex-col gap-0.5 px-4 py-3 text-sm font-medium">
+                <a href="projects.html" class="nav-link">Drops</a>
+                <a href="news.html" class="nav-link">News</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="about.html" class="nav-link">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1">
+
+        <!-- ================= Hero ================= -->
+        <section class="relative overflow-hidden">
+            <div class="grid-bg pointer-events-none" aria-hidden="true"></div>
+
+            <div class="relative mx-auto max-w-3xl px-4 pb-1 pt-20 text-center sm:pt-24">
+                <a href="#" class="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-secondary transition-colors hover:border-accent hover:text-primary">
+                    <i class="fa-solid fa-rocket text-[13px]"></i> Built with Astro
+                </a>
+
+                <h1 class="mt-7 text-[38px] font-bold leading-[1.06] tracking-[-0.03em] sm:text-[54px]">
+                    Open Source DropStack<br class="hidden sm:block"> to Popular Software
+                </h1>
+
+                <p class="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-secondary sm:text-base">
+                    Over 1 million users replaced their proprietary tools with open source software.
+                    Discover the best DropStack, ditch the subscriptions, and take back control of your data.
+                </p>
+
+                <!-- Search -->
+                <div class="relative mx-auto mt-9 w-full max-w-xl" style="display: none;">
+                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-secondary">
+                        <i class="fa-solid fa-magnifying-glass text-[16px]"></i>
+                    </span>
+                    <input id="searchInput" type="text" autocomplete="off" spellcheck="false"
+                           class="search-input"
+                           placeholder="Search alternatives — try &quot;Notion&quot;, &quot;Firebase&quot; or &quot;analytics&quot;"
+                           aria-label="Search alternatives">
+                    <kbd id="kbdHint" class="pointer-events-none absolute right-3.5 top-1/2 hidden h-5 min-w-[20px] -translate-y-1/2 items-center justify-center rounded border border-border bg-card px-1.5 font-mono text-[10px] text-secondary sm:flex">Ctrl K</kbd>
+                    <button id="clearBtn" class="clear-btn hidden" aria-label="Clear search">
+                        <i class="fa-solid fa-xmark text-[13px]"></i>
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <!-- <div class="mt-12 flex items-center justify-center gap-8 sm:gap-14">
+                    <div>
+                        <div class="stat-num text-primary" data-target="1000000" data-suffix="+">0</div>
+                        <div class="stat-label">Users switched</div>
+                    </div>
+                    <div class="h-9 w-px bg-border"></div>
+                    <div>
+                        <div class="stat-num text-primary" data-target="2400" data-suffix="+">0</div>
+                        <div class="stat-label">Alternatives listed</div>
+                    </div>
+                    <div class="h-9 w-px bg-border"></div>
+                    <div>
+                        <div class="stat-num text-primary" data-target="300" data-suffix="+">0</div>
+                        <div class="stat-label">SaaS tools covered</div>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+           <!-- ================= Sponsors ================= -->
+        <section class="mt-20 border-t border-border">
+            <div class="mx-auto max-w-6xl px-4 py-12 text-center">
+                <p class="text-xs text-secondary">DropStack is supported by these incredible partners and sponsors</p>
+                <a href="#" class="mt-1.5 inline-block text-xs font-medium text-secondary underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary">Advertise with us</a>
+
+                <div class="mt-8 grid grid-cols-2 overflow-hidden rounded-xl border-t border-l border-border md:grid-cols-5">
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-brands fa-codepen text-[15px]"></i><span>CodeRabbit</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-plane text-[15px]"></i><span>Openlane</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-aperture text-[15px]"></i><span>capture.page</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-paper-plane text-[15px]"></i><span>Sent</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-database text-[15px]"></i><span>influxdata</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-file-lines text-[15px]"></i><span>Docmost</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-code text-[15px]"></i><span>c15t</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-camera text-[15px]"></i><span>ScreenshotOne</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-box-archive text-[15px]"></i><span>postiz</span></a>
+                    <a href="#" class="sponsor-cell border-r border-b border-border"><i class="fa-solid fa-wind text-[15px]"></i><span>Windshift</span></a>
+                </div>
+            </div>
+        </section>
+
+    </br>
+    </br>
+
+        <!-- ================= Directory: alternatives (left) + news sidebar (right) ================= -->
+        <section class="mx-auto max-w-6xl px-4 sm:px-6">
+            <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
+
+                <!-- ===== Main column: alternatives ===== -->
+                <div id="alternatives" class="min-w-0">
+
+                    <!-- Category pills with scroll arrows -->
+                    <div id="categories" class="flex items-center gap-2 d-none" style="display: none;">
+                        <button id="pillPrev" class="pill-arrow" aria-label="Scroll categories left">
+                            <i class="fa-solid fa-chevron-left text-[13px]"></i>
+                        </button>
+                        <div id="pillScroller" class="no-scrollbar flex flex-1 gap-2 overflow-x-auto">
+                            <button class="pill active" data-cat="all">All</button>
+                            <button class="pill" data-cat="productivity">Productivity</button>
+                            <button class="pill" data-cat="developer-tools">Developer Tools</button>
+                            <button class="pill" data-cat="analytics">Analytics</button>
+                            <button class="pill" data-cat="marketing">Marketing</button>
+                            <button class="pill" data-cat="design">Design</button>
+                            <button class="pill" data-cat="databases">Databases</button>
+                            <button class="pill" data-cat="cms">CMS</button>
+                            <button class="pill" data-cat="communication">Communication</button>
+                        </div>
+                        <button id="pillNext" class="pill-arrow" aria-label="Scroll categories right">
+                            <i class="fa-solid fa-chevron-right text-[13px]"></i>
+                        </button>
+                    </div>
+
+                    <!-- Tabs + result count -->
+                    <div class="mt-6 flex flex-wrap items-end justify-between gap-x-4 border-b border-border">
+                        <div class="flex">
+                            <button class="tab active" data-tab="latest">Latest</button>
+                            <button class="tab" data-tab="popular">Popular</button>
+                            <button class="tab" data-tab="trending">Trending</button>
+                        </div>
+                        <p id="resultCount" class="pb-2.5 font-mono text-[11px] text-secondary" aria-live="polite"></p>
+                    </div>
+
+                    <!-- Cards (rendered by JS) -->
+                    <div id="list" class="mt-5 flex flex-col gap-3.5"></div>
+
+                    <!-- Show more -->
+                    <div class="mt-7 flex justify-center">
+                        <button id="showMoreBtn" class="show-more">
+                            <span id="showMoreLabel">Show more</span>
+                            <i class="fa-solid fa-chevron-down text-[13px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ===== Sidebar: News ===== -->
+                <aside class="min-w-0">
+                    <div class="flex flex-col gap-6 lg:sticky lg:top-20">
+
+                        <!-- News list -->
+                        <div>
+                            <div class="flex items-center justify-between border-b border-border pb-3">
+                                <h2 class="flex items-center gap-2 text-sm font-semibold text-primary">
+                                    <i class="fa-solid fa-newspaper text-[14px] text-accent"></i>
+                                    News
+                                </h2>
+                                <a href="news.html" class="inline-flex items-center gap-1 text-xs font-medium text-secondary transition-colors hover:text-primary">
+                                    View all <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                                </a>
+                            </div>
+                            <div id="newsList"></div>
+                        </div>
+
+                        <!-- Follow on X card -->
+                        <a href="#" class="group flex items-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent">
+                            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg" style="background:var(--foreground);color:var(--background)">
+                                <i class="fa-brands fa-x-twitter text-[15px]"></i>
+                            </span>
+                            <span class="min-w-0 flex-1">
+                                <span class="block text-[13px] font-semibold text-primary">Follow @dropstack</span>
+                                <span class="mt-0.5 block text-[11px] leading-snug text-secondary">Newest alternatives, straight in your feed.</span>
+                            </span>
+                            <i class="fa-solid fa-arrow-right i-arrow-up-right shrink-0 text-[14px] text-secondary transition-colors group-hover:text-accent"></i>
+                        </a>
+
+                        <!-- Newsletter card -->
+                        <div class="rounded-xl border border-border bg-card p-5">
+                            <div class="flex items-center gap-2.5">
+                                <span class="grid h-7 w-7 place-items-center rounded-md border border-border text-accent">
+                                    <i class="fa-solid fa-envelope text-[13px]"></i>
+                                </span>
+                                <h3 class="text-sm font-semibold text-primary">Open Source Weekly</h3>
+                            </div>
+                            <p class="mt-2.5 text-xs leading-relaxed text-secondary">
+                                The best new alternatives and open source news, delivered to your inbox every week. No spam, unsubscribe anytime.
+                            </p>
+                            <form id="newsForm" class="mt-3.5 flex gap-2">
+                                <input id="newsEmail" type="email" required placeholder="you@example.com" class="news-input" aria-label="Email address">
+                                <button type="submit" class="btn btn-solid shrink-0">Join</button>
+                            </form>
+                            <p id="newsFormMsg" class="mt-2.5 hidden text-xs font-medium text-accent">Thanks! You're on the list.</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <br>
+        <br>
+    </main>
+
+    <!-- ================= Global search (Ctrl+K) ================= -->
+    <div class="overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle">
+        <div class="modal search-modal">
+            <div class="flex items-center gap-3 border-b border-border px-4">
+                <i class="fa-solid fa-magnifying-glass text-[15px] text-secondary"></i>
+                <input id="commandSearch" type="search" autocomplete="off" spellcheck="false"
+                       class="h-14 min-w-0 flex-1 bg-transparent text-sm text-primary outline-none placeholder:text-secondary"
+                       placeholder="Search projects, topics, licenses…" aria-label="Search all projects">
+                <kbd class="hidden rounded border border-border bg-card px-2 py-1 font-mono text-[10px] text-secondary sm:block">ESC</kbd>
+                <button id="commandSearchClose" class="icon-btn" aria-label="Close search"><i class="fa-solid fa-xmark text-[14px]"></i></button>
+            </div>
+            <div class="max-h-[min(520px,65vh)] overflow-y-auto p-2" id="commandSearchResults"></div>
+            <div class="flex items-center justify-between border-t border-border px-4 py-2 text-[10px] text-secondary">
+                <span id="commandSearchCount">0 results</span>
+                <span class="flex items-center gap-3"><span><kbd class="font-mono">↑↓</kbd> navigate</span><span><kbd class="font-mono">↵</kbd> open</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Footer ================= -->
+    <footer id="about" class="border-t border-border">
+        <div class="mx-auto max-w-6xl px-4 py-14">
+            <div class="flex flex-col gap-10 md:flex-row md:justify-between">
+                <div class="max-w-xs">
+                    <a href="index.html" class="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight">
+                        <img src="assets/logo/logo-main-light.png" alt="DropStack logo" class="h-6 w-auto dark:hidden">
+                        <img src="assets/logo/logo-main-dark.png" alt="DropStack logo" class="hidden h-6 w-auto dark:block">
+                    </a>
+                    <p class="mt-4 text-[13px] leading-relaxed text-secondary">
+                        Discover open source alternatives to popular SaaS products. Ditch subscriptions, own your data, and support the open source movement.
+                    </p>
+                    <div class="mt-5 flex gap-2">
+                        <a href="#" class="icon-btn" aria-label="X (Twitter)"><span><i class="fa-brands fa-x-twitter text-[15px]"></i></span></a>
+                        <a href="https://github.com/piotrkulpinski/openalternative" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub"><span><i class="fa-brands fa-github text-[15px]"></i></span></a>
+                        <a href="#" class="icon-btn" aria-label="Mastodon"><span><i class="fa-brands fa-mastodon text-[15px]"></i></span></a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-14 gap-y-8 sm:grid-cols-3">
+                    <div>
+                        <h4 class="text-[11px] font-semibold uppercase tracking-wider text-secondary">Explore</h4>
+                        <ul class="mt-3.5 space-y-2.5">
+                            <li><a class="foot-link" href="projects.html">Projects</a></li>
+                            <li><a class="foot-link" href="news.html">News</a></li>
+                            <li><a class="foot-link" href="pricing.html">Pricing</a></li>
+                            <li><a class="foot-link" href="about.html">About</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-[11px] font-semibold uppercase tracking-wider text-secondary">Resources</h4>
+                        <ul class="mt-3.5 space-y-2.5">
+                            <li><a class="foot-link" href="news.html">Blog</a></li>
+                            <li><a class="foot-link" href="about.html">About</a></li>
+                            <li><a class="foot-link" href="#">FAQ</a></li>
+                            <li><a class="foot-link" href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-[11px] font-semibold uppercase tracking-wider text-secondary">Community</h4>
+                        <ul class="mt-3.5 space-y-2.5">
+                            <li><a class="foot-link" href="https://github.com/piotrkulpinski/openalternative" target="_blank" rel="noopener">GitHub</a></li>
+                            <li><a class="foot-link" href="#">X (Twitter)</a></li>
+                            <li><a class="foot-link" href="#">Mastodon</a></li>
+                            <li><a class="foot-link" href="#">RSS</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 text-xs text-secondary sm:flex-row">
+                <p>© 2025 DropStack. All listings belong to their respective owners.</p>
+                <p class="flex items-center gap-1.5">Made with <i class="fa-solid fa-heart text-[11px] text-accent"></i> by the open source community</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= Floating ad (dismissible) ================= -->
+    <aside id="floatAd" class="geist-shadow fixed bottom-5 right-5 z-30 hidden w-[calc(100vw-2.5rem)] max-w-xs rounded-xl border border-border bg-popover p-4 lg:block">
+        <button id="floatAdClose" aria-label="Dismiss ad"
+                class="absolute right-2.5 top-2.5 grid h-6 w-6 place-items-center rounded-md text-secondary transition-colors hover:text-primary">
+            <i class="fa-solid fa-xmark text-[13px]"></i>
+        </button>
+        <div class="flex gap-3 pr-6">
+            <div class="tile !h-9 !w-9" style="background:#18181b;color:#ffffff">
+                <i class="fa-solid fa-camera text-[16px]"></i>
+            </div>
+            <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-semibold text-primary">ScreenshotOne</span>
+                    <span class="ad-pill">Ad</span>
+                </div>
+                <p class="mt-1.5 text-xs leading-relaxed text-secondary">Capture pixel-perfect screenshots of any website with a simple API. Trusted by 3,000+ developers.</p>
+                <a href="#" class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary underline decoration-border underline-offset-4 transition-colors hover:decoration-primary">
+                    Learn more <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ================= Scripts ================= -->
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

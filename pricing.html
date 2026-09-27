@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing — DropStack</title>
+    <meta name="description" content="Simple, transparent pricing for DropStack. Choose the plan that fits your needs.">
+    <meta name="theme-color" id="metaTheme" content="#0a1310">
+    <link rel="icon" href="assets/logo/iconlogo.png">
+
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('oa-theme') || 'dark';
+                var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (theme === 'dark' || (theme === 'system' && systemDark)) document.documentElement.classList.add('dark');
+            } catch (e) { document.documentElement.classList.add('dark'); }
+        })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        mono: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace']
+                    },
+                    colors: {
+                        background: 'var(--background)', card: 'var(--card)', popover: 'var(--popover)',
+                        border: 'var(--border)', primary: 'var(--foreground)',
+                        secondary: 'var(--secondary)', accent: 'var(--accent)'
+                    }
+                }
+            }
+        };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referencerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-background text-primary font-sans antialiased min-h-screen flex flex-col">
+    <header class="site-header sticky top-0 z-40 w-full border-b border-border">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+            <div class="flex h-16 items-center justify-between gap-3">
+                <div class="flex items-center gap-7">
+                    <a href="index.html" class="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight">
+                        <img src="assets/logo/logo-main-light.png" alt="DropStack logo" class="h-6 w-auto dark:hidden">
+                        <img src="assets/logo/logo-main-dark.png" alt="DropStack logo" class="hidden h-6 w-auto dark:block">
+                    </a>
+                    <nav class="hidden md:flex items-center gap-0.5 text-sm font-medium">
+                        <a href="projects.html" class="nav-link">Drops</a>
+                        <a href="news.html" class="nav-link">News</a>
+                        <a href="pricing.html" class="nav-link active">Pricing</a>
+                        <a href="about.html" class="nav-link">About</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="theme-wrap relative" id="themeWrap">
+                        <button id="themeBtn" class="icon-btn" aria-label="Change theme" aria-haspopup="listbox" aria-expanded="false">
+                            <span id="tiSun" class="hidden"><i class="fa-solid fa-sun text-[15px]"></i></span>
+                            <span id="tiMoon"><i class="fa-solid fa-moon text-[15px]"></i></span>
+                            <span id="tiMonitor" class="hidden"><i class="fa-solid fa-desktop text-[15px]"></i></span>
+                        </button>
+                        <div class="theme-menu" id="themeMenu" role="listbox" aria-label="Appearance">
+                            <p class="px-2.5 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-wider text-secondary">Appearance</p>
+                            <button class="theme-option" role="option" data-set-theme="light" aria-selected="false"><span><i class="fa-solid fa-sun text-[14px]"></i></span> Light<span class="check"><i class="fa-solid fa-check text-[12px]"></i></span></button>
+                            <button class="theme-option" role="option" data-set-theme="dark" aria-selected="false"><span><i class="fa-solid fa-moon text-[14px]"></i></span> Dark<span class="check"><i class="fa-solid fa-check text-[12px]"></i></span></button>
+                            <button class="theme-option" role="option" data-set-theme="system" aria-selected="false"><span><i class="fa-solid fa-desktop text-[14px]"></i></span> System<span class="check"><i class="fa-solid fa-check text-[12px]"></i></span></button>
+                        </div>
+                    </div>
+                    <button id="menuBtn" class="icon-btn md:hidden" aria-label="Toggle menu">
+                        <span id="miMenu"><i class="fa-solid fa-bars text-[15px]"></i></span>
+                        <span id="miClose" class="hidden"><i class="fa-solid fa-xmark text-[15px]"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-menu hidden border-t border-border md:hidden" data-shared-mobile-menu>
+            <nav class="mx-auto flex max-w-6xl flex-col gap-0.5 px-4 py-3 text-sm font-medium">
+                <a href="projects.html" class="nav-link">Drops</a>
+                <a href="news.html" class="nav-link">News</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="about.html" class="nav-link">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1">
+        <!-- Hero -->
+        <section class="page-hero">
+            <div class="grid-bg pointer-events-none" aria-hidden="true"></div>
+            <div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
+                <p class="page-eyebrow"><i class="fa-solid fa-tags"></i> PRICING</p>
+                <h1 class="mt-3 text-3xl font-bold tracking-[-0.03em] sm:text-5xl">Simple, transparent pricing</h1>
+                <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-secondary sm:text-base">Choose the plan that works best for you. All plans include access to our open source directory.</p>
+            </div>
+        </section>
+
+        <!-- Ads content from API -->
+        <section class="mx-auto max-w-4xl px-4 sm:px-6">
+            <div id="adsContent" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="empty-state sm:col-span-2 lg:col-span-3"><i class="fa-solid fa-spinner fa-spin"></i><p>Loading ads…</p></div>
+            </div>
+        </section>
+
+        <!-- Pricing cards -->
+        <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+            <div class="grid gap-6 md:grid-cols-3">
+                <!-- Free -->
+                <article class="pricing-card">
+                    <div class="flex items-center gap-3">
+                        <span class="grid h-10 w-10 place-items-center rounded-lg border border-border text-accent"><i class="fa-solid fa-gift text-[18px]"></i></span>
+                        <div>
+                            <h3 class="text-lg font-semibold text-primary">Free</h3>
+                            <p class="text-xs text-secondary">For individuals</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex items-baseline gap-1">
+                        <span class="text-4xl font-bold tracking-tight text-primary">$0</span>
+                        <span class="text-sm text-secondary">/month</span>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-secondary">Get started with our open source directory at no cost. Perfect for personal use.</p>
+                    <ul class="mt-6 space-y-3 text-sm text-secondary">
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Access to full directory</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Community support</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Weekly newsletter</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Search & filters</li>
+                    </ul>
+                    <a href="projects.html" class="btn btn-outline mt-8 w-full">Get Started</a>
+                </article>
+
+                <!-- Pro (featured) -->
+                <article class="pricing-card pricing-card-featured">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="grid h-10 w-10 place-items-center rounded-lg bg-accent text-[#06130b]"><i class="fa-solid fa-rocket text-[18px]"></i></span>
+                            <div>
+                                <h3 class="text-lg font-semibold text-primary">Pro</h3>
+                                <p class="text-xs text-secondary">For professionals</p>
+                            </div>
+                        </div>
+                        <span class="pricing-badge">Popular</span>
+                    </div>
+                    <div class="mt-6 flex items-baseline gap-1">
+                        <span class="text-4xl font-bold tracking-tight text-primary">$9</span>
+                        <span class="text-sm text-secondary">/month</span>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-secondary">Unlock advanced features and support the open source community.</p>
+                    <ul class="mt-6 space-y-3 text-sm text-secondary">
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Everything in Free</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Ad-free experience</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Priority support</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Early access to new features</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> API access</li>
+                    </ul>
+                    <a href="#" class="btn btn-accent mt-8 w-full">Get Pro</a>
+                </article>
+
+                <!-- Enterprise -->
+                <article class="pricing-card">
+                    <div class="flex items-center gap-3">
+                        <span class="grid h-10 w-10 place-items-center rounded-lg border border-border text-accent"><i class="fa-solid fa-building text-[18px]"></i></span>
+                        <div>
+                            <h3 class="text-lg font-semibold text-primary">Enterprise</h3>
+                            <p class="text-xs text-secondary">For teams</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex items-baseline gap-1">
+                        <span class="text-4xl font-bold tracking-tight text-primary">$29</span>
+                        <span class="text-sm text-secondary">/month</span>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-secondary">Advanced controls and dedicated support for organizations.</p>
+                    <ul class="mt-6 space-y-3 text-sm text-secondary">
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Everything in Pro</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Team management</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Custom integrations</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> Dedicated support</li>
+                        <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-accent mt-0.5 text-[13px]"></i> SLA guarantee</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline mt-8 w-full">Contact Sales</a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-border">
+        <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-secondary sm:flex-row">
+            <p>© <span data-current-year>2026</span> DropStack</p>
+            <a href="index.html" class="hover:text-primary">Back to homepage</a>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/pricing.js"></script>
+</body>
+</html>
