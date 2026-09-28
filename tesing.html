@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DropStack - Drops</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        .container {
+            width: min(1200px, 92%);
+            margin: 60px auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .section-title h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #6b7280;
+        }
+
+        .drops-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .drop-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 24px;
+            transition: 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .drop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .drop-card h2 {
+            font-size: 21px;
+            color: #111827;
+        }
+
+        .status {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #15803d;
+            text-transform: capitalize;
+        }
+
+        .drop-card p {
+            color: #6b7280;
+            line-height: 1.6;
+            min-height: 52px;
+            margin-bottom: 20px;
+        }
+
+        .view-btn {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: #111827;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .view-btn:hover {
+            background: #2563eb;
+        }
+
+        .loading,
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 900px) {
+            .drops-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .drops-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="container">
+
+        <div class="section-title">
+            <h1>Latest Drops</h1>
+            <p>Discover useful tools, resources and developer drops.</p>
+        </div>
+
+        <div id="dropsContainer" class="drops-grid">
+            <div class="loading">Loading drops...</div>
+        </div>
+
+    </section>
+
+    <script>
+        const API_URL = "https://dropstack.site.je/api/test.php";
+
+        async function loadDrops() {
+
+            const container = document.getElementById("dropsContainer");
+
+            try {
+
+                const response = await fetch(API_URL);
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch drops");
+                }
+
+                const result = await response.json();
+
+                container.innerHTML = "";
+
+                if (!result.success || !result.data.length) {
+                    container.innerHTML = `
+                        <div class="error">
+                            No drops available.
+                        </div>
+                    `;
+                    return;
+                }
+
+                result.data.forEach(drop => {
+
+                    const card = document.createElement("article");
+
+                    card.className = "drop-card";
+
+                    card.innerHTML = `
+                        <div class="card-top">
+                            <h2>${escapeHTML(drop.name)}</h2>
+
+                            <span class="status">
+                                ${escapeHTML(drop.status)}
+                            </span>
+                        </div>
+
+                        <p>
+                            ${escapeHTML(drop.description)}
+                        </p>
+
+                        <a
+                            href="${escapeAttribute(drop.link)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="view-btn"
+                        >
+                            View Drop
+                        </a>
+                    `;
+
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                container.innerHTML = `
+                    <div class="error">
+                        Unable to load drops. Please try again later.
+                    </div>
+                `;
+            }
+        }
+
+        // Basic protection when inserting API data into HTML
+        function escapeHTML(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function escapeAttribute(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        loadDrops();
+    </script>
+
+</body>
+</html>
